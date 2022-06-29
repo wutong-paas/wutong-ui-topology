@@ -1,0 +1,40 @@
+name: commit-ci
+
+env:
+  TITLE: wutong-ui-topology
+  BASE_VERSION: v1.0.0
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set ENV
+        run: |
+          echo "VERSION=${BASE_VERSION}-beta-${GITHUB_SHA::7}" >> $GITHUB_ENV
+
+      - name: Login to myhuaweicloud-swr
+        uses: docker/login-action@v1
+        with:
+          registry: ${{ secrets.DOMESTIC_DOCKER_SERVER }}
+          username: ${{ secrets.DOMESTIC_DOCKER_USERNAME }}
+          password: ${{ secrets.DOMESTIC_DOCKER_PASSWORD }}
+
+      - name: Build and push
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          file: Dockerfile
+          push: true
+          tags: ${{ secrets.DOMESTIC_DOCKER_SERVER }}/wutong/${{ env.TITLE }}:${{ env.VERSION }}
+      
+      - name: Image digest
+        run: echo ${{ steps.docker_build.outputs.digest }}
+
+        
