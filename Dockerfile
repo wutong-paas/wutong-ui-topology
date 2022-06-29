@@ -1,9 +1,8 @@
-FROM node:6.9.0 AS builder
-RUN npm install -g yarn
+FROM node:4.2.2 AS builder
 WORKDIR /home/weave
 COPY . .
 ENV NPM_CONFIG_LOGLEVEL=warn NPM_CONFIG_PROGRESS=false
-RUN yarn && yarn run build
+RUN npm install && npm run build
 
 FROM nginx
 WORKDIR /usr/share/nginx/weave
