@@ -393,14 +393,14 @@ export function clickNode(nodeId, label, origin, serviceAlias, serviceCname) {
       dispatch,
       serviceAlias
     )
-    appVisitInfo(
-      state.get('topologyUrlsById'),
-      state.get('currentTopologyId'),
-      activeTopologyOptionsSelector(state),
-      state.get('nodeDetails'),
-      dispatch,
-      serviceAlias
-    )
+    // appVisitInfo(
+    //   state.get('topologyUrlsById'),
+    //   state.get('currentTopologyId'),
+    //   activeTopologyOptionsSelector(state),
+    //   state.get('nodeDetails'),
+    //   dispatch,
+    //   serviceAlias
+    // )
     appModuleInfo(
       state.get('topologyUrlsById'),
       state.get('currentTopologyId'),
