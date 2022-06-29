@@ -6,4 +6,4 @@ RUN npm install && npm run build && ls
 
 FROM nginx
 WORKDIR /usr/share/nginx/weave
-COPY --from=builder ./dist  .
+COPY --from=builder /home/weave/dist  .
