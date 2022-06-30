@@ -32,7 +32,7 @@ jobs:
         with:
           file: Dockerfile
           push: true
-          tags: latest,${{ secrets.DOMESTIC_DOCKER_SERVER }}/wutong/${{ env.TITLE }}:${{ env.VERSION }}
+          tags: ${{ secrets.DOMESTIC_DOCKER_SERVER }}/wutong/${{ env.TITLE }}:latest,${{ secrets.DOMESTIC_DOCKER_SERVER }}/wutong/${{ env.TITLE }}:${{ env.VERSION }}
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
