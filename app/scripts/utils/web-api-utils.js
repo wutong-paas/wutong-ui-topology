@@ -486,7 +486,7 @@ export function Disklist(topologyUrlsById, currentTopologyId, options, nodeMap, 
   const region = windowParent.iframeGetRegion && windowParent.iframeGetRegion();
   const groupId = windowParent.iframeGetGroupId && windowParent.iframeGetGroupId();
   let url = '';
-  if (serviceAlias && tenantName) {
+  if (serviceAlias && tenantName && serviceAlias !== 'internet') {
     const topologyUrl = topologyUrlsById.get(obj.topologyId);
     url = `/console/teams/${tenantName}/apps/${serviceAlias}/resource?region=${region}&_=${new Date().getTime()}`;
 
@@ -520,7 +520,9 @@ export function GetPods(topologyUrlsById, currentTopologyId, options, nodeMap, d
   const region = windowParent.iframeGetRegion && windowParent.iframeGetRegion();
   const groupId = windowParent.iframeGetGroupId && windowParent.iframeGetGroupId();
   let url = '';
-  if (serviceAlias && tenantName) {
+  console.log(serviceAlias,'serviceAlias')
+  if (serviceAlias && tenantName && serviceAlias !== 'internet') {
+    console.log('coming')
     const topologyUrl = topologyUrlsById.get(obj.topologyId);
     url = `/console/teams/${tenantName}/apps/${serviceAlias}/pods?region=${region}&_=${new Date().getTime()}`;
 
@@ -554,7 +556,7 @@ export function Visitinfo(topologyUrlsById, currentTopologyId, options, nodeMap,
   const region = windowParent.iframeGetRegion && windowParent.iframeGetRegion();
   const groupId = windowParent.iframeGetGroupId && windowParent.iframeGetGroupId();
   let url = '';
-  if (serviceAlias && tenantName) {
+  if (serviceAlias && tenantName && serviceAlias !=='internet') {
     const topologyUrl = topologyUrlsById.get(obj.topologyId);
     url = `/console/teams/${tenantName}/apps/${serviceAlias}/visit?region=${region}&_=${new Date().getTime()}`;
 
@@ -690,7 +692,7 @@ export function Podname(serviceAlias){
     const tenantName = windowParent.iframeGetTenantName && windowParent.iframeGetTenantName();
     const region = windowParent.iframeGetRegion && windowParent.iframeGetRegion();
     let url = '';
-    if(serviceAlias){
+    if(serviceAlias && serviceAlias !=='internet'){
       url = `/console/teams/${tenantName}/apps/${serviceAlias}/pods?region=${region}&_=${new Date().getTime()}`;
       doRequest({
         url,
