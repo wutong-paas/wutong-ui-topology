@@ -1,4 +1,4 @@
-FROM node:4.2.2 AS builder
+FROM node:6.9 AS builder
 WORKDIR /home/weave
 COPY . .
 ENV NPM_CONFIG_LOGLEVEL=warn NPM_CONFIG_PROGRESS=false
