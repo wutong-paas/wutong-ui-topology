@@ -486,6 +486,7 @@ export function Disklist(topologyUrlsById, currentTopologyId, options, nodeMap, 
   const tenantName = windowParent.iframeGetTenantName && windowParent.iframeGetTenantName();
   const region = windowParent.iframeGetRegion && windowParent.iframeGetRegion();
   const groupId = windowParent.iframeGetGroupId && windowParent.iframeGetGroupId();
+  const envId = windowParent.iframeGetEnvId && windowParent.iframeGetEnvId();
   let url = '';
   if (serviceAlias && tenantName && serviceAlias !== 'internet') {
     const topologyUrl = topologyUrlsById.get(obj.topologyId);
@@ -520,6 +521,7 @@ export function GetPods(topologyUrlsById, currentTopologyId, options, nodeMap, d
   const tenantName = windowParent.iframeGetTenantName && windowParent.iframeGetTenantName();
   const region = windowParent.iframeGetRegion && windowParent.iframeGetRegion();
   const groupId = windowParent.iframeGetGroupId && windowParent.iframeGetGroupId();
+  const envId = windowParent.iframeGetEnvId && windowParent.iframeGetEnvId();
   let url = '';
   console.log(serviceAlias,'serviceAlias')
   if (serviceAlias && tenantName && serviceAlias !== 'internet') {
@@ -556,6 +558,7 @@ export function Visitinfo(topologyUrlsById, currentTopologyId, options, nodeMap,
   const tenantName = windowParent.iframeGetTenantName && windowParent.iframeGetTenantName();
   const region = windowParent.iframeGetRegion && windowParent.iframeGetRegion();
   const groupId = windowParent.iframeGetGroupId && windowParent.iframeGetGroupId();
+  const envId = windowParent.iframeGetEnvId && windowParent.iframeGetEnvId();
   let url = '';
   if (serviceAlias && tenantName && serviceAlias !=='internet') {
     const topologyUrl = topologyUrlsById.get(obj.topologyId);
@@ -590,6 +593,7 @@ export function appVisitInfo(topologyUrlsById, currentTopologyId, options, nodeM
   const tenantName = windowParent.iframeGetTenantName && windowParent.iframeGetTenantName();
   const region = windowParent.iframeGetRegion && windowParent.iframeGetRegion();
   const groupId = windowParent.iframeGetGroupId && windowParent.iframeGetGroupId();
+  const envId = windowParent.iframeGetEnvId && windowParent.iframeGetEnvId();
   let url = '';
   if (serviceAlias && tenantName) {
     const topologyUrl = topologyUrlsById.get(obj.topologyId);
@@ -624,6 +628,7 @@ export function appModuleInfo(topologyUrlsById, currentTopologyId, options, node
   const tenantName = windowParent.iframeGetTenantName && windowParent.iframeGetTenantName();
   const region = windowParent.iframeGetRegion && windowParent.iframeGetRegion();
   const groupId = windowParent.iframeGetGroupId && windowParent.iframeGetGroupId();
+  const envId = windowParent.iframeGetEnvId && windowParent.iframeGetEnvId();
   let url = '';
   if (serviceAlias && tenantName) {
     const topologyUrl = topologyUrlsById.get(obj.topologyId);
@@ -658,6 +663,7 @@ export function appInfo(topologyUrlsById, currentTopologyId, options, nodeMap, d
   const tenantName = windowParent.iframeGetTenantName && windowParent.iframeGetTenantName();
   const region = windowParent.iframeGetRegion && windowParent.iframeGetRegion();
   const groupId = windowParent.iframeGetGroupId && windowParent.iframeGetGroupId();
+  const envId = windowParent.iframeGetEnvId && windowParent.iframeGetEnvId();
   let url = '';
   if (serviceAlias && tenantName) {
     const topologyUrl = topologyUrlsById.get(obj.topologyId);
@@ -692,6 +698,7 @@ export function Podname(serviceAlias){
     const windowParent = window.parent;
     const tenantName = windowParent.iframeGetTenantName && windowParent.iframeGetTenantName();
     const region = windowParent.iframeGetRegion && windowParent.iframeGetRegion();
+    const envId = windowParent.iframeGetEnvId && windowParent.iframeGetEnvId();
     let url = '';
     if(serviceAlias && serviceAlias !=='internet'){
       url = `/paas-console/console/teams/${tenantName}/env/${envId}/apps/${serviceAlias}/pods?region=${region}&_=${new Date().getTime()}`;
@@ -721,6 +728,7 @@ export async function Dateils(topologyUrlsById, currentTopologyId, options, node
   const tenantName = windowParent.iframeGetTenantName && windowParent.iframeGetTenantName();
   const region = windowParent.iframeGetRegion && windowParent.iframeGetRegion();
   const groupId = windowParent.iframeGetGroupId && windowParent.iframeGetGroupId();
+  const envId = windowParent.iframeGetEnvId && windowParent.iframeGetEnvId();
   if (obj && serviceAlias && tenantName && groupId && padname) {
     const topologyUrl = topologyUrlsById.get(obj.topologyId);
     let url = '';
