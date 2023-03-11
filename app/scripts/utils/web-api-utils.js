@@ -441,13 +441,14 @@ export function getNodeDetails(topologyUrlsById, currentTopologyId, options, nod
   const tenantName = windowParent.iframeGetTenantName && windowParent.iframeGetTenantName();
   const region = windowParent.iframeGetRegion && windowParent.iframeGetRegion();
   const groupId = windowParent.iframeGetGroupId && windowParent.iframeGetGroupId();
+  const envId = windowParent.iframeGetEnvId && windowParent.iframeGetEnvId()
   if (obj && serviceAlias && tenantName && groupId) {
     const topologyUrl = topologyUrlsById.get(obj.topologyId);
     let url = '';
     if (obj.id === 'The Internet') {
-      url = `/console/teams/${tenantName}/${groupId}/outer-service?region=${region}&_=${new Date().getTime()}`;
+      url = `/paas-console/console/teams/${tenantName}/env/${envId}/${groupId}/outer-service?region=${region}&_=${new Date().getTime()}`;
     } else {
-      url = `/console/teams/${tenantName}/topological/services/${serviceAlias}?region=${region}&_=${new Date().getTime()}`;
+      url = `/paas-console/console/teams/${tenantName}/env/${envId}/topological/services/${serviceAlias}?region=${region}&_=${new Date().getTime()}`;
     }
     doRequest({
       url,
@@ -488,7 +489,7 @@ export function Disklist(topologyUrlsById, currentTopologyId, options, nodeMap, 
   let url = '';
   if (serviceAlias && tenantName && serviceAlias !== 'internet') {
     const topologyUrl = topologyUrlsById.get(obj.topologyId);
-    url = `/console/teams/${tenantName}/apps/${serviceAlias}/resource?region=${region}&_=${new Date().getTime()}`;
+    url = `/paas-console/console/teams/${tenantName}/env/${envId}/apps/${serviceAlias}/resource?region=${region}&_=${new Date().getTime()}`;
 
     doRequest({
       url,
@@ -524,7 +525,7 @@ export function GetPods(topologyUrlsById, currentTopologyId, options, nodeMap, d
   if (serviceAlias && tenantName && serviceAlias !== 'internet') {
     console.log('coming')
     const topologyUrl = topologyUrlsById.get(obj.topologyId);
-    url = `/console/teams/${tenantName}/apps/${serviceAlias}/pods?region=${region}&_=${new Date().getTime()}`;
+    url = `/paas-console/console/teams/${tenantName}/env/${envId}/apps/${serviceAlias}/pods?region=${region}&_=${new Date().getTime()}`;
 
     doRequest({
       url,
@@ -558,7 +559,7 @@ export function Visitinfo(topologyUrlsById, currentTopologyId, options, nodeMap,
   let url = '';
   if (serviceAlias && tenantName && serviceAlias !=='internet') {
     const topologyUrl = topologyUrlsById.get(obj.topologyId);
-    url = `/console/teams/${tenantName}/apps/${serviceAlias}/visit?region=${region}&_=${new Date().getTime()}`;
+    url = `/paas-console/console/teams/${tenantName}/env/${envId}/apps/${serviceAlias}/visit?region=${region}&_=${new Date().getTime()}`;
 
     doRequest({
       url,
@@ -592,7 +593,7 @@ export function appVisitInfo(topologyUrlsById, currentTopologyId, options, nodeM
   let url = '';
   if (serviceAlias && tenantName) {
     const topologyUrl = topologyUrlsById.get(obj.topologyId);
-    url = `/console/teams/${tenantName}/group/service/visitservice_alias=${serviceAlias}?region=${region}&_=${new Date().getTime()}`;
+    url = `/paas-console/console/teams/${tenantName}/env/${envId}/group/service/visitservice_alias=${serviceAlias}?region=${region}&_=${new Date().getTime()}`;
 
     doRequest({
       url,
@@ -626,7 +627,7 @@ export function appModuleInfo(topologyUrlsById, currentTopologyId, options, node
   let url = '';
   if (serviceAlias && tenantName) {
     const topologyUrl = topologyUrlsById.get(obj.topologyId);
-    url = `/console/teams/${tenantName}/groups/${groupId}?region=${region}&_=${new Date().getTime()}`;
+    url = `/paas-console/console/teams/${tenantName}/env/${envId}/groups/${groupId}?region=${region}&_=${new Date().getTime()}`;
 
     doRequest({
       url,
@@ -660,7 +661,7 @@ export function appInfo(topologyUrlsById, currentTopologyId, options, nodeMap, d
   let url = '';
   if (serviceAlias && tenantName) {
     const topologyUrl = topologyUrlsById.get(obj.topologyId);
-    url = `/console/teams/${tenantName}/groups/${groupId}/status?region=${region}&_=${new Date().getTime()}`;
+    url = `/paas-console/console/teams/${tenantName}/env/${envId}/groups/${groupId}/status?region=${region}&_=${new Date().getTime()}`;
 
     doRequest({
       url,
@@ -693,7 +694,7 @@ export function Podname(serviceAlias){
     const region = windowParent.iframeGetRegion && windowParent.iframeGetRegion();
     let url = '';
     if(serviceAlias && serviceAlias !=='internet'){
-      url = `/console/teams/${tenantName}/apps/${serviceAlias}/pods?region=${region}&_=${new Date().getTime()}`;
+      url = `/paas-console/console/teams/${tenantName}/env/${envId}/apps/${serviceAlias}/pods?region=${region}&_=${new Date().getTime()}`;
       doRequest({
         url,
         success: (res) => {
@@ -724,9 +725,9 @@ export async function Dateils(topologyUrlsById, currentTopologyId, options, node
     const topologyUrl = topologyUrlsById.get(obj.topologyId);
     let url = '';
     if (obj.id === 'The Internet') {
-      url = `/console/teams/${tenantName}/${groupId}/outer-service?region=${region}&_=${new Date().getTime()}`;
+      url = `/paas-console/console/teams/${tenantName}/env/${envId}/${groupId}/outer-service?region=${region}&_=${new Date().getTime()}`;
     } else {
-      url = `/console/teams/${tenantName}/apps/${serviceAlias}/pods/${padname}/detail?region=${region}&_=${new Date().getTime()}`;
+      url = `/paas-console/console/teams/${tenantName}/env/${envId}/apps/${serviceAlias}/pods/${padname}/detail?region=${region}&_=${new Date().getTime()}`;
     }
 
     doRequest({
