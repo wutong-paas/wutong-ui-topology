@@ -191,7 +191,7 @@ function doRequest(opts) {
 
   const token = cookie.get('token');
   if (token) {
-    config.headers.Authorization = `GRJWT ${token}`;
+    config.headers.Authorization = `Bearer ${token}`;
   }
 
   return reqwest(config);
