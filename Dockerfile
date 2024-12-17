@@ -1,9 +1,6 @@
-FROM node:6.9 AS builder
-WORKDIR /home/weave
-COPY . .
-ENV NPM_CONFIG_LOGLEVEL=warn NPM_CONFIG_PROGRESS=false
-RUN npm install && npm run build && ls
+FROM swr.cn-southwest-2.myhuaweicloud.com/wutong/nginx:1.19
+COPY dist/ /usr/share/nginx/html
 
-FROM nginx
-WORKDIR /usr/share/nginx/weave
-COPY --from=builder /home/weave/dist  .
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
