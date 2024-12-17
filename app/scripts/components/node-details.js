@@ -243,13 +243,15 @@ class NodeDetails extends React.Component {
     const tools = this.renderTools();
     const nodeInfo = this.props.nodes.get(this.props.id).toJS();
     //服务列表
-    const portList = nodeDetails.port_list || {};
+    const portList = nodeDetails.portList || {};
     //此属性只有云节点有
     const nodeList = getNodeList(nodeDetails);
+
     //依赖列表
-    const relationList = nodeDetails.relation_list || {};
+    const relationList = nodeDetails.relationList || {};
     const show = showDetailContent(nodeDetails);
-    const container_memory = nodeDetails.container_memory;
+    const containerMemory = nodeDetails.limitMemory;
+
     // 实例平均占用内存
     const podMemory = getPodMemory(nodeDetails);
     const styles = {
@@ -260,16 +262,16 @@ class NodeDetails extends React.Component {
         backgroundColor: nodeColor
       }
     };
-    let instance_count = 0;
+    let instanceCount = 0;
     instancePods.map((item, index) => {
-      if (item.pod_status == 'RUNNING') {
-        instance_count++
+      if (item.podStatus == 'RUNNING') {
+        instanceCount++
       }
-      return instance_count
+      return instanceCount;
     })
     // const nodeInfo = this.props.nodes.get(this.props.label).toJS();
     //计算运行时间
-    var day = Math.floor(new Date().getTime() / 1000) - (new Date(nodeDetails.start_time).getTime() / 1000),
+    var day = Math.floor(new Date().getTime() / 1000) - (new Date(nodeDetails.createdAt).getTime() / 1000),
       day2 = Math.floor(day / (24 * 3600)),
       day3 = day2 * 24 * 3600,
       day4 = day - day3,
@@ -282,7 +284,7 @@ class NodeDetails extends React.Component {
     return (
       <div className={'node-details'}>
         {tools}
-        <div className="node-details-header" style={{ backgroundColor: getStatusColor(nodeDetails.cur_status) }}>
+        <div className="node-details-header" style={{ backgroundColor: getStatusColor(nodeDetails.status) }}>
           <div className="node-details-header-wrapper" style={{ padding: '16px 36px 0px 36px' }}>
 
             <h2 className="node-details-header-label" title={nodeInfo.label}>
@@ -300,7 +302,7 @@ class NodeDetails extends React.Component {
 
             {
               nodeDetails.id == 'The Internet' ? null :
-                nodeDetails.cur_status == "third_party" ?
+                nodeDetails.status == "third_party" ?
                   <div className="node-details-header-relatives">
                     <table style={{ width: '100%' }}>
                       <tr>
@@ -313,7 +315,7 @@ class NodeDetails extends React.Component {
                       <tr style={{ display: 'flex', justifyContent: 'start', alignItems: 'center', padding: '0px 34px' }}>
                         {
                           // nodeDetails.cur_status != 'abnormal' && nodeDetails.cur_status != 'undeploy' && nodeDetails.cur_status != 'starting' &&  nodeDetails.cur_status != 'closed' &&  nodeDetails.cur_status != 'creating' &&
-                          (visit.length > 0 && Object.keys(portList).length > 0) && nodeDetails.cur_status == 'running' &&
+                          (visit.length > 0 && Object.keys(portList).length > 0) && nodeDetails.status == 'running' &&
                           (<td style={{ cursor: 'pointer', position: 'relative', marginRight: '40px' }}>
                             <div onMouseOver={() => { this.visit() }} title="访问" style={{ fontSize: '20px' }} className="iconfont icon-icon_web"></div>
                             {shows && (
@@ -324,12 +326,12 @@ class NodeDetails extends React.Component {
                                   return (
                                     <tbody>
                                         {
-                                          portItem.outer_url && (
+                                          portItem.outerUrl && (
                                             <div>
                                               {
                                                 portItem.protocol === 'stream' ?
-                                                  <a style={{ color: 'rgba(0,0,0,.65)', lineHeight: '30px', textDecoration:'underline', display:'block' }} href="javascript:;" target="_blank">{portItem.outer_url.split(':')[0]}</a>
-                                                  : <a style={{ color: 'rgba(0,0,0,.65)', lineHeight: '30px', textDecoration:'underline', display:'block' }} href={portItem.protocol + '://' + portItem.outer_url} target="_blank">{portItem.outer_url.split(':')[0]}</a>
+                                                  <a style={{ color: 'rgba(0,0,0,.65)', lineHeight: '30px', textDecoration:'underline', display:'block' }} href="javascript:;" target="_blank">{portItem.outerUrl.split(':')[0]}</a>
+                                                  : <a style={{ color: 'rgba(0,0,0,.65)', lineHeight: '30px', textDecoration:'underline', display:'block' }} href={portItem.protocol + '://' + portItem.outerUrl} target="_blank">{portItem.outer_url.split(':')[0]}</a>
                                               }
                                             </div>
                                           )
@@ -401,39 +403,39 @@ class NodeDetails extends React.Component {
                   <div style={{ width: '100%' }}>
                     <div style={{ display: 'flex', justifyContent: 'center' }}>
                       <div style={{ textAlign: 'right', width: '40%' }}>运行状态：</div>
-                      <div style={{ textAlign: 'left', width: '60%' }}>{nodeDetails.status_cn || '部分实例异常'}</div>
+                      <div style={{ textAlign: 'left', width: '60%' }}>{nodeDetails.statusCN || '部分实例异常'}</div>
                     </div>
                     <div style={{ display: 'flex' }}>
-                      <div style={{ textAlign: 'right', width: '40%' }}>内存：</div>
-                      <div style={{ textAlign: 'left', width: '60%' }}>{nodeDetails.total_memory + 'MB' || ''}</div>
+                      <div style={{ textAlign: 'right', width: '40%' }}>最大内存限制：</div>
+                      <div style={{ textAlign: 'left', width: '60%' }}>{nodeDetails.limitMemory || ''}</div>
                     </div>
                     <div style={{ display: 'flex' }}>
-                      <div style={{ textAlign: 'right', width: '40%' }}>CPU：</div>
-                      <div style={{ textAlign: 'left', width: '60%' }}>{nodeDetails.container_cpu ? nodeDetails.container_cpu + 'm' : '不限制'}</div>
+                      <div style={{ textAlign: 'right', width: '40%' }}>最大CPU限制：</div>
+                      <div style={{ textAlign: 'left', width: '60%' }}>{nodeDetails.limitCPU ? nodeDetails.limitCPU  : '不限制'}</div>
                     </div>
                     <div style={{ display: 'flex' }}>
                       <div style={{ textAlign: 'right', width: '40%' }}>磁盘：</div>
                       <div style={{ textAlign: 'left', width: '60%' }}>{disks + 'MB'}</div>
                     </div>
                     <div style={{ display: 'flex' }}>
-                      <div style={{ textAlign: 'right', width: '40%' }}>运行时间：</div>
-                      {(nodeDetails.start_time == "" || !nodeDetails.start_time) ? (
-                        <div style={{ textAlign: 'left', width: '60%' }}>{'当前状态无运行时间'}</div>
+                      <div style={{ textAlign: 'right', width: '40%' }}>运行时长：</div>
+                      {(nodeDetails.runningTime == "" || !nodeDetails.runningTime) ? (
+                        <div style={{ textAlign: 'left', width: '60%' }}>{'当前状态无运行时长'}</div>
                       ) : (
-                        <div style={{ textAlign: 'left', width: '60%' }}>{`${day2}天${day5}小时${day7}分钟${day8}秒`}</div>
+                        <div style={{ textAlign: 'left', width: '60%' }}>{nodeDetails.runningTime}</div>
                       )}
                     </div>
                     <div style={{ display: 'flex' }}>
                       <div style={{ textAlign: 'right', width: '40%' }}>版本号：</div>
-                      {(nodeDetails.deploy_version == '' || nodeDetails.deploy_version == 'undefined') ? (
+                      {(nodeDetails.buildVersion == '' || nodeDetails.buildVersion == 'undefined') ? (
                         <div style={{ textAlign: 'left', width: '60%' }}>{'当前状态无版本号'}</div>
                       ) : (
-                        <div style={{ textAlign: 'left', width: '60%' }}>{nodeDetails.deploy_version}</div>
+                        <div style={{ textAlign: 'left', width: '60%' }}>{nodeDetails.buildVersion}</div>
                       )}
                     </div>
                     <div style={{ display: 'flex' }}>
-                      <div style={{ textAlign: 'right', width: '40%' }}>运行实例数量：</div>
-                      <div style={{ textAlign: 'left', width: '60%' }}>{instance_count}</div>
+                      <div style={{ textAlign: 'right', width: '40%' }}>实例数量：</div>
+                      <div style={{ textAlign: 'left', width: '60%' }}>{nodeDetails.replicas || 0}</div>
                     </div>
                   </div>
                 </div>
@@ -485,21 +487,21 @@ class NodeDetails extends React.Component {
                   </thead>
                   {
                     nodeList.map((node, index) => {
-                      let portMap = node.port_map || {};
+                      let portMap = node.portMap || {};
                       return Object.keys(portMap).map((key, index) => {
                         let portItem = portMap[key];
                         return (
                           <tbody>
                             {
-                              portItem.outer_url && (
+                              portItem.outerUrl && (
                                 <tr>
-                                  <td style={{ textAlign: 'left', textDecoration: 'underline', cursor: 'pointer' }}><a style={{ color: '#3c3c5a' }} href={portItem.protocol + '://' + portItem.outer_url} target="_blank">{portItem.outer_url.split(':')[0]}</a></td>
-                                  <td style={{ textAlign: 'right' }}>{portItem.outer_url.split(':')[1]}</td>
+                                  <td style={{ textAlign: 'left', textDecoration: 'underline', cursor: 'pointer' }}><a style={{ color: '#3c3c5a' }} href={portItem.protocol + '://' + portItem.outerUrl} target="_blank">{portItem.outerUrl.split(':')[0]}</a></td>
+                                  <td style={{ textAlign: 'right' }}>{portItem.outerUrl.split(':')[1]}</td>
                                 </tr>
                               )
                             }
                             {
-                              (portItem.domain_list || []).map((domain, index) => {
+                              (portItem.domainList || []).map((domain, index) => {
                                 return (
                                   <tr>
                                     <td style={{ textAlign: 'left', textDecoration: 'underline', cursor: 'pointer' }}><a style={{ color: '#3c3c5a' }} href={domain} target="_blank">{domain}</a></td>
@@ -509,10 +511,10 @@ class NodeDetails extends React.Component {
                               })
                             }
                             {
-                              (portItem.is_inner_service) && (
+                              (portItem.isInnerComponent) && (
                                 <tr>
-                                  <td style={{ textAlign: 'left' }}>{node.service_cname}</td>
-                                  <td style={{ textAlign: 'right' }}>{portItem.mapping_port}</td>
+                                  <td style={{ textAlign: 'left' }}>{node.componentName}</td>
+                                  <td style={{ textAlign: 'right' }}>{portItem.mappingPort}</td>
                                 </tr>
                               )
                             }
@@ -545,21 +547,21 @@ class NodeDetails extends React.Component {
 
                         <tbody>
                           {
-                            portItem.outer_url && (
+                            portItem.outerUrl && (
                               <tr>
                                 {
                                   portItem.protocol === 'stream' ?
-                                    <td style={{ textAlign: 'left' }}><a style={{ color: '#3c3c5a' }} href="javascript:;" target="_blank">{portItem.outer_url.split(':')[0]}</a></td>
+                                    <td style={{ textAlign: 'left' }}><a style={{ color: '#3c3c5a' }} href="javascript:;" target="_blank">{portItem.outerUrl.split(':')[0]}</a></td>
                                     :
-                                    <td style={{ textAlign: 'left', textDecoration: 'underline', cursor: 'pointer' }}><a style={{ color: '#3c3c5a' }} href={portItem.protocol + '://' + portItem.outer_url} target="_blank">{portItem.outer_url.split(':')[0]}</a></td>
+                                    <td style={{ textAlign: 'left', textDecoration: 'underline', cursor: 'pointer' }}><a style={{ color: '#3c3c5a' }} href={portItem.protocol + '://' + portItem.outerUrl} target="_blank">{portItem.outerUrl.split(':')[0]}</a></td>
                                 }
 
-                                <td style={{ textAlign: 'right' }}>{portItem.outer_url.split(':')[1]}</td>
+                                <td style={{ textAlign: 'right' }}>{portItem.outerUrl.split(':')[1]}</td>
                               </tr>
                             )
                           }
                           {
-                            (portItem.domain_list || []).map((domain, index) => {
+                            (portItem.domainList || []).map((domain, index) => {
                               return (
                                 <tr>
                                   <td style={{ textAlign: 'left', textDecoration: 'underline', cursor: 'pointer' }}><a style={{ color: '#3c3c5a' }} href={domain} target="_blank">{domain}</a></td>
@@ -571,8 +573,8 @@ class NodeDetails extends React.Component {
                           {
                             (portItem.is_inner_service) && (
                               <tr>
-                                <td style={{ textAlign: 'left' }}>{nodeDetails.service_cname}</td>
-                                <td style={{ textAlign: 'right' }}>{portItem.mapping_port}</td>
+                                <td style={{ textAlign: 'left' }}>{nodeDetails.componentName}</td>
+                                <td style={{ textAlign: 'right' }}>{portItem.mappingPort}</td>
                               </tr>
                             )
                           }
@@ -601,8 +603,8 @@ class NodeDetails extends React.Component {
                         return relationListItem.map((item, index) => {
                           return (
                             <tr>
-                              <td onClick = {this.handleClickRelation.bind(this, item)} style={{ textAlign: 'left', textDecoration: 'underline', cursor: 'pointer' }}>{item.service_cname}</td>
-                              <td style={{ textAlign: 'right' }}>{item.mapping_port}</td>
+                              <td onClick = {this.handleClickRelation.bind(this, item)} style={{ textAlign: 'left', textDecoration: 'underline', cursor: 'pointer' }}>{item.componentName}</td>
+                              <td style={{ textAlign: 'right' }}>{item.mappingPort}</td>
                             </tr>
                           );
                         });
@@ -614,7 +616,7 @@ class NodeDetails extends React.Component {
             }
 
             {
-              ((nodeDetails.pod_list || []).length > 0) && (
+              ((nodeDetails.podList || []).length > 0) && (
                 <div className="node-details-content-section">
                   <table style={{ width: '100%', tableLayout: 'fixed' }}>
                     <thead>
@@ -628,8 +630,8 @@ class NodeDetails extends React.Component {
                         (nodeDetails.pod_list || []).map((value, index) => {
                           return (
                             <tr>
-                              <td style={{ textAlign: 'left' }}>{value.pod_name}</td>
-                              <td style={{ textAlign: 'right' }}>{container_memory}M</td>
+                              <td style={{ textAlign: 'left' }}>{value.podName}</td>
+                              <td style={{ textAlign: 'right' }}>{containerMemory}M</td>
                             </tr>
                           );
                         })

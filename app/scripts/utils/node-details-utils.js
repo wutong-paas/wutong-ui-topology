@@ -2,8 +2,8 @@ import { NODE_DETAILS_TABLE_COLUMN_WIDTHS } from '../constants/styles';
 
 //判断一个port是否可以显示
 function isPortActive(port) {
-    var domain = port.domain_list || [];
-    if(domain.length || port.is_inner_service || port.is_outer_service){
+    var domain = port.domainList || [];
+    if(domain.length || port.isInnerComponent || port.isOuterComponent){
       return true;
     }
     return false;
@@ -11,7 +11,7 @@ function isPortActive(port) {
 
 //过滤节点下不可用的port
 function filterNodePort(node) {
-   var portMap = node.port_map||{};
+   var portMap = node.portMap||{};
    var portKeys = Object.keys(portMap);
    for(var i=0;i<portKeys.length;i++){
       if(!isPortActive(portMap[portKeys[i]])){
@@ -21,12 +21,12 @@ function filterNodePort(node) {
 }
 
 function getInternerPort(nodeDetails) {
-    var nodeList = nodeDetails.result_list||[];
+    var nodeList = nodeDetails.resultList || [];
     var res = [];
     for (var i=0;i<nodeList.length;i++) {
         var node = nodeList[i];
         filterNodePort(node);
-        var portMap = node.port_map;
+        var portMap = node.portMap;
         var portKeys = Object.keys(portMap);
         // 判断此节点下是否有可用的port
         if(portKeys.length){

@@ -272,7 +272,7 @@ function goodrainData2scopeData(data = {}) {
     remove: null
   };
   const add = [];
-  const keys = Object.keys(data.json_data);
+  const keys = Object.keys(data.jsonData);
   let node = {};
   let item = {};
   const cloud = {
@@ -294,34 +294,34 @@ function goodrainData2scopeData(data = {}) {
   }
 
   function getStackNum(item) {
-    if (item.cur_status !== 'running') {
+    if (item.status !== 'running') {
       return 1;
     }
-    item.node_num = item.node_num || 1;
-    return item.node_num > 3 ? 3 : item.node_num;
+    item.replicas = item.replicas || 1;
+    return item.replicas > 3 ? 3 : item.replicas;
   }
 
   keys.forEach((k) => {
-    if (Object.prototype.hasOwnProperty.call(data.json_data, k)) {
+    if (Object.prototype.hasOwnProperty.call(data.jsonData, k)) {
       node = {};
-      item = data.json_data[k];
-      node.cur_status = item.cur_status;
-      node.service_cname = item.service_cname;
-      node.service_id = item.service_id;
-      node.service_alias = item.service_alias;
-      node.id = item.service_id;
-      node.label = item.service_cname;
+      item = data.jsonData[k];
+      node.cur_status = item.status;
+      node.service_cname = item.componentName;
+      node.service_id = item.componentId;
+      node.service_alias = item.componentShortCode;
+      node.id = item.componentId;
+      node.label = item.componentName;
       node.lineTip = item.lineTip;
-      node.labelMinor = '';
+      node.labelMinor = "";
       // 根据状态改变颜色用
-      node.rank = node.cur_status;
-      node.shape = 'hexagon';
+      node.rank = item.status;
+      node.shape = "hexagon";
       node.stack = true;
       node.stackNum = 1;
-      node.linkable = item.cur_status === 'running' ? 1 : 0;
-      node.adjacency = data.json_svg[k] || [];
+      node.linkable = item.status === "running" ? 1 : 0;
+      node.adjacency = data.jsonSvg[k] || [];
       add.push(node);
-      if (item.is_internet) {
+      if (item.isInternet) {
         cloud.adjacency.push(k);
       }
     }
@@ -357,7 +357,7 @@ function goodrainData2scopeData(data = {}) {
           scopeData.add = scopeDataAdd;
         }
         // update
-        if ((newData[i].adjacency !== scopeDataAdd[k].adjacency) || (newData[i].cur_status !== scopeDataAdd[k].cur_status)) {
+        if ((newData[i].adjacency !== scopeDataAdd[k].adjacency) || (newData[i].status !== scopeDataAdd[k].status)) {
           scopeData.update = scopeDataAdd;
         }
       }
@@ -382,12 +382,12 @@ export function getNodesDelta(topologyUrl, options, dispatch) {
     // tiem++
   const windowParent = window.parent;
   const url = (windowParent && windowParent.iframeGetNodeUrl && windowParent.iframeGetNodeUrl()) || '';
-  // const url = 'https://goodrain.goodrain.com/console/teams/64q1jlfb/regions/rainbond/topological?group_id=644';
+  //const url ="http://localhost:4043/console/v3/app/topology?appId=d46375146e1a4b718fc616b08e266c78";
   doRequest({
     url,
     success: (res) => {
       if (res.code === 200) {
-        const scopeData = goodrainData2scopeData(res.data.bean);
+        const scopeData = goodrainData2scopeData(res.data);
         dispatch(receiveNodesDelta(scopeData));
       }
       setTimeout(() => {
@@ -440,28 +440,29 @@ export function getNodeDetails(topologyUrlsById, currentTopologyId, options, nod
   const obj = nodeMap.last();
   const tenantName = windowParent.iframeGetTenantName && windowParent.iframeGetTenantName();
   const region = windowParent.iframeGetRegion && windowParent.iframeGetRegion();
-  const groupId = windowParent.iframeGetGroupId && windowParent.iframeGetGroupId();
+  const appId = windowParent.iframeGetGroupId && windowParent.iframeGetGroupId() || 'd46375146e1a4b718fc616b08e266c78';
   const envId = windowParent.iframeGetEnvId && windowParent.iframeGetEnvId()
-  if (obj && serviceAlias && tenantName && groupId) {
+  if (obj && appId) {
     const topologyUrl = topologyUrlsById.get(obj.topologyId);
     let url = '';
     if (obj.id === 'The Internet') {
-      url = `/paas-console/console/teams/${tenantName}/env/${envId}/${groupId}/outer-service?region=${region}&_=${new Date().getTime()}`;
+      url = `/console/v3/app/topology/gateway?appId=${appId}`;
     } else {
-      url = `/paas-console/console/teams/${tenantName}/env/${envId}/topological/services/${serviceAlias}?region=${region}&_=${new Date().getTime()}`;
+      url = `/console/v3/app/topology/component?componentId=${obj.id}`;
     }
     doRequest({
       url,
       success: (res) => {
         res = res || {};
 
-        res.rank = res.cur_status;
+        res.rank = res.status;
         if (obj.id === 'The Internet') {
           res.cur_status = 'running';
         }
         res = res || {};
+        console.log(res,'ddd')
         const data = res.data || {};
-        const bean = data.bean || {};
+        const bean = data || {};
         bean.id = obj.id;
         dispatch(receiveNodeDetails(bean));
       },
