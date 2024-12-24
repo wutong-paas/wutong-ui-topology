@@ -446,9 +446,9 @@ export function getNodeDetails(topologyUrlsById, currentTopologyId, options, nod
     const topologyUrl = topologyUrlsById.get(obj.topologyId);
     let url = '';
     if (obj.id === 'The Internet') {
-      url = `/console/v3/app/topology/gateway?appId=${appId}`;
+      url = `/bone/cube-gateway/consolev3/app/topology/gateway?appId=${appId}`;
     } else {
-      url = `/console/v3/app/topology/component?componentId=${obj.id}`;
+      url = `/bone/cube-gateway/consolev3/app/topology/component?componentId=${obj.id}`;
     }
     doRequest({
       url,
